@@ -15,7 +15,7 @@ parallel = ["ndarray-parallel", "rayon"]
 
 [dependencies]
 csv = "*"
-rand = { version = "*", features =["small_rng"]}
+rand = { version = "0.7.3", features =["small_rng"]}
 num = "*"
 ndarray = "0.13.0"
 bencher = "*"

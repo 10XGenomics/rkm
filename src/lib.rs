@@ -111,7 +111,7 @@ fn initialize_plusplus<V: Value>(
         None => SmallRng::from_rng(rand::thread_rng()).unwrap(),
     };
     let data_len = data.shape()[0];
-    let chosen = rng.gen_range(0, data_len);
+    let chosen = rng.gen_range(0..data_len);
     means
         .slice_mut(s![0..1, ..])
         .assign(&data.slice(s![chosen..(chosen + 1), ..]));

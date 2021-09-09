@@ -2,21 +2,16 @@
 This crate contains a simple implementation of the
 [k-means clustering algorithm](http://en.wikipedia.org/wiki/K-means_clustering).
 */
-extern crate num;
-extern crate rand;
-#[cfg(feature = "parallel")]
-extern crate rayon;
-#[macro_use(s)]
-extern crate ndarray;
-#[cfg(feature = "parallel")]
-extern crate ndarray_parallel;
 
-use ndarray::{Array2, ArrayView1, ArrayView2, Axis, Ix, ScalarOperand};
+use ndarray::{s, Array2, ArrayView1, ArrayView2, Axis, Ix, ScalarOperand};
 #[cfg(feature = "parallel")]
 use ndarray_parallel::prelude::*;
 use num::{Float, NumCast, Zero};
-use rand::distributions::{Distribution, WeightedIndex};
-use rand::{rngs::SmallRng, Rng, SeedableRng};
+use rand::{
+    distributions::{Distribution, WeightedIndex},
+    Rng, SeedableRng,
+};
+use rand_pcg::Pcg64Mcg;
 #[cfg(feature = "parallel")]
 use rayon::prelude::*;
 use std::cmp::PartialOrd;
@@ -107,11 +102,11 @@ fn initialize_plusplus<V: Value>(
     assert!(n_trials > 0);
     let mut means = Array2::zeros((k as usize, data.shape()[1]));
     let mut rng = match seed {
-        Some(seed) => SmallRng::from_seed(seed.to_le_bytes()),
-        None => SmallRng::from_rng(rand::thread_rng()).unwrap(),
+        Some(seed) => Pcg64Mcg::from_seed(seed.to_le_bytes()),
+        None => Pcg64Mcg::from_rng(rand::thread_rng()).unwrap(),
     };
     let data_len = data.shape()[0];
-    let chosen = rng.gen_range(0, data_len);
+    let chosen = rng.gen_range(0..data_len);
     means
         .slice_mut(s![0..1, ..])
         .assign(&data.slice(s![chosen..(chosen + 1), ..]));
@@ -169,11 +164,11 @@ fn initialize_plusplus<V: Value>(
     assert!(n_trials > 0);
     let mut means = Array2::zeros((k as usize, data.shape()[1]));
     let mut rng = match seed {
-        Some(seed) => SmallRng::seed_from_u64(seed as u64),
-        None => SmallRng::from_rng(rand::thread_rng()).unwrap(),
+        Some(seed) => Pcg64Mcg::seed_from_u64(seed as u64),
+        None => Pcg64Mcg::from_rng(rand::thread_rng()).unwrap(),
     };
     let data_len = data.shape()[0];
-    let chosen = rng.gen_range(0, data_len);
+    let chosen = rng.gen_range(0..data_len);
     means
         .slice_mut(s![0..1, ..])
         .assign(&data.slice(s![chosen..(chosen + 1), ..]));

@@ -19,12 +19,12 @@ fn read_test_data(data_path: &str, dim: usize) -> Array2<f32> {
 
 fn bench_iris(b: &mut Bencher) {
     let data = read_test_data("data/iris.data.csv", 2);
-    b.iter(|| rkm::kmeans_lloyd(&data.view(), 3));
+    b.iter(|| rkm::kmeans_lloyd(&data.view(), 3, Some(1), None));
 }
 
 fn bench_s1(b: &mut Bencher) {
     let data = read_test_data("data/s1.data.csv", 2);
-    b.iter(|| rkm::kmeans_lloyd(&data.view(), 15));
+    b.iter(|| rkm::kmeans_lloyd(&data.view(), 15, Some(1), None));
 }
 
 // Disabled due to https://github.com/rust-lang/rust/issues/11010
@@ -32,12 +32,12 @@ fn bench_s1(b: &mut Bencher) {
 #[allow(dead_code)]
 fn bench_birch3(b: &mut Bencher) {
     let data = read_test_data("data/birch3.data.csv", 2);
-    b.iter(|| rkm::kmeans_lloyd(&data.view(), 100));
+    b.iter(|| rkm::kmeans_lloyd(&data.view(), 100, Some(1), None));
 }
 
 fn bench_dim128(b: &mut Bencher) {
     let data = read_test_data("data/dim128.data.csv", 128);
-    b.iter(|| rkm::kmeans_lloyd(&data.view(), 16));
+    b.iter(|| rkm::kmeans_lloyd(&data.view(), 16, Some(1), None));
 }
 
 // TODO: bencher uses too high an iteration count for birch3, takes forever to execute

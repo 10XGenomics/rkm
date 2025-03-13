@@ -19,7 +19,7 @@ csv = "*"
 rand = { version = "0.8", features = ["small_rng"] }
 rand_pcg = "0.3"
 num = "*"
-ndarray = "0.15"
+ndarray = ">=0.16,<0.18"
 bencher = "*"
 ndarray-parallel = { version = "*", optional = true }
 rayon = { version = "*", optional = true }
@@ -34,5 +34,5 @@ path = "src/example.rs"
 
 [[bench]]
 name = "bench"
-path = "src/bench.rs"
+path = "rkm/benches/bench.rs"
 harness = false
